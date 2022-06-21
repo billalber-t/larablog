@@ -1,4 +1,4 @@
-    @extends('layout')
+    <!-- @extends('layout')
     
     @section('content')
     <article>
@@ -16,4 +16,5 @@
         </div>
     </article> 
 
-    @endsection  
+    @endsection   -->
+
