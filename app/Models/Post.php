@@ -8,20 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-    // protected $fillable = ['title', 'excerpt','body', 'category_id'];
+
     protected $guarded = [];
 
-    protected $with=['category','author'];
+    protected $with = ['category', 'author'];
 
-    // public function getRouteKeyName(){
-    //     return 'slug';
-    // }
-
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function author(){
+    public function author()
+    {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function scopeFilter($query)
+    {
+
+        if (request('search')) {
+            $query
+                ->where('title', 'like', '%' . request('search') . '%')
+                ->orWhere('body', 'like', '%' . request('search') . '%');
+        }
     }
 }

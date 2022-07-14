@@ -26,6 +26,11 @@ class DatabaseSeeder extends Seeder
         // $user = User::factory()->create([
         //     'name'=>'John Doe'
         // ]);
+        User::factory()->create([
+            'name'=>'John Doe'
+        ]);
+
+        
 
         Post::factory(5)->create();
 

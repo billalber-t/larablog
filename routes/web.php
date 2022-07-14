@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
-use \App\Models\Post;
-use \App\Models\Category;
-use \App\Models\User;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
+use App\Models\Post;
+use App\Models\Category;
+use App\Models\User;
+use Clockwork\Storage\Search;
+
+// use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 
 /*
@@ -19,77 +22,21 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', [PostController::class, 'index']);
 
-    // $posts = collect(File::files(resource_path("posts")))
-    //                 ->map(fn ($file)=> $document = YamlFrontMatter::parseFile($file))
-    //                 ->map(fn ($document)=> new Post(
-    //                         $document -> title,
-    //                         $document -> slug,
-    //                         $document -> date,
-    //                         $document -> excerpt, 
-    //                         $document -> body()
-    //                       )
-    //                 );
+Route::get('/posts/{post:slug}', [PostController::class, 'show']);
 
-    
-    // foreach( $files as $file ){
-    //     $document = YamlFrontMatter::parseFile($file);
-
-    //     $posts[] = new Post(
-    //         $document -> title,
-    //         $document -> slug,
-    //         $document -> date,
-    //         $document -> excerpt, 
-    //         $document -> body()
-    //     );
-    // }
-
-
-
-    // $documents[] = YamlFrontMatter::parseFile($files);
-    // $files = File::files(resource_path("posts/"));
-
-    // ddd($posts);
-    // // $posts = Post::all();
-
-    // \Illuminate\Support\Facades\DB::listen( function($query){
-    //     logger($query->sql , $query->bindings);
-    // });
-    // with('category','author')->
-
+Route::get('/categories/{category:slug}', function (Category $category) {
     return view('posts', [
-        'posts' => Post::latest()->get()
-    ]);
-
-});
-
-
-Route::get('/posts/{post:slug}', function( Post $post){
-
-    //Find a post by its slug and pass it to a view called "post"
-
-    return  view('post',
-    [
-        // 'post'=> Post::find($slug)
-        // 'post'=>file_get_contents(__DIR__ . '/../resources/posts/my-first-post.html')
-        'post'=> $post
-        // 'post'=> Post::findOrFail($id)
-    ]);
-
-});
-
-Route::get('/categories/{category:slug}', function(Category $category){
-    return view('posts',[
-        'posts'=> $category->posts
+        'posts' => $category->posts->load(['category', 'author']),
+        'categories' => Category::all()
     ]);
 });
 
-// -> where('post','[A-z_\-]+');
 
-
-Route::get('authors/{author:username}', function(User $author){
+Route::get('authors/{author:username}', function (User $author) {
     return view('posts', [
-        'posts'=>$author->posts
+        'posts' => $author->posts->load(['category', 'author']),
+        'categories' => Category::all()
     ]);
 });
