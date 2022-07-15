@@ -16,6 +16,7 @@
         </div>
       @endif
 
+    {{ $posts->links() }}
     @else
       <p>No post... Please try later</p>
     @endif

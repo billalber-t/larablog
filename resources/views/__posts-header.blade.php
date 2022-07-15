@@ -19,15 +19,9 @@
           </svg>
         </button>
         <div x-show="show" class="py-2 absolute bg-gray-100 w-full mt-2 rounded-xl z-50" style="display:none">
-          <a href="/" class="block text-left px-3 text-sm leading-6 hover:bg-gray-300 focus:bg-gray-300">
-            All
-          </a>
-          @foreach ($categories as $category )
-          <a href="/categories/{{$category->slug}}" class="block text-left px-3 text-sm leading-6 hover:bg-gray-300 focus:bg-gray-300">
-            {{ $category->name}}
-          </a>
-          @endforeach
 
+          <x-category-drop-down />
+          
         </div>
       </div>
 
@@ -56,13 +50,8 @@
     <!-- Search -->
     <div class="relative flex lg:inline-flex items-center bg-gray-100 rounded-xl px-3 py-2">
       <form method="GET" action="#">
-        <input 
-          type="text" 
-          name="search" 
-          placeholder="Find something" 
-          class="bg-transparent placeholder-black font-semibold text-sm"
-          value="{{ request('search')}}"
-        >
+        <input type="hidden" name="category" value="{{ request('category') }}">
+        <input type="text" name="search" placeholder="Find something" class="bg-transparent placeholder-black font-semibold text-sm" value="{{ request('search')}}">
       </form>
     </div>
   </div>
